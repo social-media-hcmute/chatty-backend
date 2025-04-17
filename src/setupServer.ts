@@ -14,6 +14,8 @@ import hpp from "hpp";
 import compression from "compression";
 import cookieSession from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
+import { config } from "./config";
+
 const SERVER_PORT = 5000;
 
 export class SocialMediaServer {
@@ -35,9 +37,9 @@ export class SocialMediaServer {
     app.use(
       cookieSession({
         name: "session",
-        keys: ["test1", "test2"],
+        keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        secure: true,
+        secure: config.NODE_ENV !== "development",
       })
     );
 
@@ -45,7 +47,7 @@ export class SocialMediaServer {
     app.use(helmet());
     app.use(
       cors({
-        origin: "*",
+        origin: config.CLIENT_URL,
         credentials: true,
         optionsSuccessStatus: 200,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

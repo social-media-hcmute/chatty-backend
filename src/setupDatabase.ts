@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import { config } from "./config";
 
 export default async () => {
   const connect = async () => {
     try {
-      await mongoose.connect("mongodb://root:123456@localhost:27018/", {
-        dbName: "social-media-backend",
+      await mongoose.connect(`${config.DATABASE_URL}`, {
+        dbName: config.DATABASE_NAME,
       });
       console.log("MongoDB connected successfully");
     } catch (error) {
@@ -12,7 +13,6 @@ export default async () => {
       process.exit(1);
     }
   };
-
   await connect();
 
   mongoose.connection.on("disconnected", async () => {
