@@ -23,6 +23,9 @@ import {
   CustomError,
   IErrorResponse,
 } from "./shared/globals/helpers/error-handler";
+import Logger from "bunyan";
+
+const log: Logger = config.createLogger("server");
 
 const SERVER_PORT = 5000;
 
@@ -74,19 +77,18 @@ export class SocialMediaServer {
   }
 
   private globalErrorHandler(app: Application): void {
-    app.all("*", (req: Request, res: Response) => {
-      res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .json({ message: `${req.originalUrl} not found` });
+    app.use((req: Request, res: Response) => {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        message: `${req.originalUrl} not found`,
+      });
     });
-
     app.use(((
       error: IErrorResponse,
       req: Request,
       res: Response,
       next: NextFunction
     ) => {
-      console.log(error);
+      log.error(error);
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json(error.serializeErrors());
       }
@@ -101,7 +103,7 @@ export class SocialMediaServer {
       this.startHttpServer(httpServer);
       this.socketIOConnections(socketIO);
     } catch (error) {
-      console.error("Error starting server:", error);
+      log.error("Error starting server:", error);
     }
   }
 
@@ -120,9 +122,9 @@ export class SocialMediaServer {
   }
 
   private startHttpServer(httpServer: http.Server): void {
-    console.log(`Starting HTTP server with ${process.pid}`);
+    log.info(`Starting HTTP server with ${process.pid}`);
     httpServer.listen(SERVER_PORT, () => {
-      console.log(`Server is running on port ${SERVER_PORT}`);
+      log.info(`Server is running on port ${SERVER_PORT}`);
     });
   }
 

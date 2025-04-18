@@ -1,22 +1,24 @@
 import mongoose from "mongoose";
 import { config } from "./config";
+import Logger from "bunyan";
 
+const log: Logger = config.createLogger("setupDatabase");
 export default async () => {
   const connect = async () => {
     try {
       await mongoose.connect(`${config.DATABASE_URL}`, {
         dbName: config.DATABASE_NAME,
       });
-      console.log("MongoDB connected successfully");
+      log.info("MongoDB connected successfully");
     } catch (error) {
-      console.error("MongoDB connection error:", error);
+      log.error("MongoDB connection error:", error);
       process.exit(1);
     }
   };
   await connect();
 
   mongoose.connection.on("disconnected", async () => {
-    console.log("MongoDB disconnected. Reconnecting...");
+    log.info("MongoDB disconnected. Reconnecting...");
     await connect();
   });
 };
