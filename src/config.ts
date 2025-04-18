@@ -9,6 +9,7 @@ class Config {
   public SECRET_KEY_ONE: string | undefined;
   public SECRET_KEY_TWO: string | undefined;
   public NODE_ENV: string | undefined;
+  public REDIS_HOST: string | undefined;
 
   private readonly DEFAULT_DATABASE_URL =
     "mongodb://root:123456@localhost:27018/";
@@ -20,6 +21,7 @@ class Config {
     this.SECRET_KEY_ONE = process.env.SECRET_KEY_ONE || "";
     this.SECRET_KEY_TWO = process.env.SECRET_KEY_TWO || "";
     this.NODE_ENV = process.env.NODE_ENV || "";
+    this.REDIS_HOST = process.env.REDIS_HOST || "";
   }
 
   public validateConfig(): void {

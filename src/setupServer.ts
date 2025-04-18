@@ -1,4 +1,4 @@
-import {
+import express, {
   Application,
   json,
   urlencoded,
@@ -15,6 +15,14 @@ import compression from "compression";
 import cookieSession from "cookie-session";
 import HTTP_STATUS from "http-status-codes";
 import { config } from "./config";
+import { Server } from "socket.io";
+import { createClient } from "redis";
+import { createAdapter } from "@socket.io/redis-adapter";
+import applicationRoutes from "./routes";
+import {
+  CustomError,
+  IErrorResponse,
+} from "./shared/globals/helpers/error-handler";
 
 const SERVER_PORT = 5000;
 
@@ -61,24 +69,62 @@ export class SocialMediaServer {
     app.use(urlencoded({ limit: "50mb", extended: true }));
   }
 
-  private routeMiddleware(app: Application): void {}
+  private routeMiddleware(app: Application): void {
+    applicationRoutes(app);
+  }
 
-  private globalErrorHandler(app: Application): void {}
+  private globalErrorHandler(app: Application): void {
+    app.all("*", (req: Request, res: Response) => {
+      res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ message: `${req.originalUrl} not found` });
+    });
+
+    app.use(((
+      error: IErrorResponse,
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ) => {
+      console.log(error);
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json(error.serializeErrors());
+      }
+      next();
+    }) as express.ErrorRequestHandler);
+  }
 
   private async startServer(app: Application): Promise<void> {
     try {
       const httpServer: http.Server = new http.Server(app);
+      const socketIO: Server = await this.createSocketIO(httpServer);
       this.startHttpServer(httpServer);
+      this.socketIOConnections(socketIO);
     } catch (error) {
       console.error("Error starting server:", error);
     }
   }
 
-  private createSocketIO(httpServer: http.Server): void {}
+  private async createSocketIO(httpServer: http.Server): Promise<Server> {
+    const io: Server = new Server(httpServer, {
+      cors: {
+        origin: config.CLIENT_URL,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      },
+    });
+    const pubClient = createClient({ url: config.REDIS_HOST });
+    const subClient = pubClient.duplicate();
+    await Promise.all([pubClient.connect(), subClient.connect()]);
+    io.adapter(createAdapter(pubClient, subClient));
+    return io;
+  }
 
   private startHttpServer(httpServer: http.Server): void {
+    console.log(`Starting HTTP server with ${process.pid}`);
     httpServer.listen(SERVER_PORT, () => {
       console.log(`Server is running on port ${SERVER_PORT}`);
     });
   }
+
+  private socketIOConnections(io: Server): void {}
 }
