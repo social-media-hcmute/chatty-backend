@@ -1,7 +1,7 @@
-import express, { Express } from "express";
-import { SocialMediaServer } from "./setupServer";
-import databaseConnection from "./setupDatabase";
-import { config } from "./config";
+import express, { Express } from 'express';
+import { SocialMediaServer } from './setupServer';
+import databaseConnection from './setupDatabase';
+import { config } from './config';
 
 class Application {
   public async initialize(): Promise<void> {
