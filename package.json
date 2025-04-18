@@ -7,7 +7,8 @@
     "lint:check": "eslint src/**/*.ts --max-warnings=0",
     "lint:fix": "eslint src/**/*.ts --fix",
     "prettier:check": "prettier --check 'src/**/*.{ts,json}'",
-    "prettier:fix": "prettier --write 'src/**/*.{ts,json}'"
+    "prettier:fix": "prettier --write 'src/**/*.{ts,json}'",
+    "build": "ttsc -p ."
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,9 @@
     "mongoose": "^8.13.2",
     "redis": "^4.7.0",
     "socket.io": "^4.8.1",
-    "typescript": "^5.8.3"
+    "ttypescript": "^1.5.15",
+    "typescript": "^5.8.3",
+    "typescript-transform-paths": "^3.5.5"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.11",

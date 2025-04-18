@@ -1,0 +1,36 @@
+# Thư mục hệ thống
+node_modules/
+dist/
+build/
+coverage/
+.tmp/
+.temp/
+
+# Cấu hình hoặc file biên dịch
+*.config.js
+*.config.cjs
+*.config.ts
+*.d.ts
+*.min.js
+
+# Tệp kiểm tra hoặc dữ liệu
+*.test.ts
+*.spec.ts
+test/
+tests/
+__tests__/
+
+# Tệp môi trường hoặc secrets
+.env
+.env.*
+
+# Public/static folders
+public/
+static/
+assets/
+
+# IDE / hệ điều hành
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
