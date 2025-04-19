@@ -32,6 +32,9 @@
       }
     ],
     "paths": {
+      "@auth/*": [
+        "src/features/auth/*"
+      ],
       "@global/*": [
         "src/shared/globals/*"
       ],
