@@ -33,3 +33,5 @@ pids/
 *.pid
 *.seed
 *.pid.lock
+
+*.http

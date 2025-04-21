@@ -15,6 +15,7 @@ class Config {
   public CLOUD_NAME: string | undefined;
   public CLOUD_API_KEY: string | undefined;
   public CLOUD_API_SECRET: string | undefined;
+  public JWT_TOKEN: string | undefined;
 
   private readonly DEFAULT_DATABASE_URL = 'mongodb://root:123456@localhost:27018/';
 
@@ -29,6 +30,7 @@ class Config {
     this.CLOUD_NAME = process.env.CLOUD_NAME || '';
     this.CLOUD_API_KEY = process.env.CLOUD_API_KEY || '';
     this.CLOUD_API_SECRET = process.env.CLOUD_API_SECRET || '';
+    this.JWT_TOKEN = process.env.JWT_TOKEN || '';
   }
 
   public createLogger(name: string): bunyan {
