@@ -1,7 +1,4 @@
-import { IAuthJob } from '@auth/interfaces/auth.interface';
 import { BaseQueue } from '@service/queues/base.queue';
-import { IUserJob } from '@user/interfaces/user.interface';
-import { authWorker } from '@worker/auth.worker';
 import { userWorker } from '@worker/user.worker';
 
 class UserQueue extends BaseQueue {

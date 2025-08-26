@@ -22,4 +22,4 @@ const passwordSchema: ObjectSchema = Joi.object().keys({
   })
 });
 
-export default emailSchema;
+export { emailSchema, passwordSchema };
