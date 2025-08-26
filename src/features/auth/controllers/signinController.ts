@@ -8,8 +8,13 @@ import { loginSchema } from '@auth/schemes/signin';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import JWT from 'jsonwebtoken';
 import Logger from 'bunyan';
-import { IUserDocument } from '@user/interfaces/user.interface';
+import { IResetPasswordParams, IUserDocument } from '@user/interfaces/user.interface';
 import { userService } from '@service/db/user-service';
+import { forgotPasswordTemplate } from '@service/emails/templates/forgot-password/forgot-password-template';
+import { emailQueue } from '@service/queues/email.queue';
+import moment from 'moment';
+import publicIP from 'ip';
+import { resetPasswordTemplate } from '@service/emails/templates/reset-password/reset-password-template';
 
 const { hash, compare } = require('bcryptjs');
 
@@ -58,6 +63,15 @@ export class SignIn {
       uId: existingUser!.uId
     } as IUserDocument;
 
+    const templateParams: IResetPasswordParams = {
+      username: existingUser.username!,
+      email: existingUser.email!,
+      ipaddress: publicIP.address(),
+      date: moment().format('DD/MM/YYYY HH:mm')
+    };
+
+    const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
+    emailQueue.addEmailJob('forgotPasswordEmail',{template, receiverEmail: 'olin.homenick91@ethereal.email',subject: 'Password Reset Confirmation'});
     res.status(HTTP_STATUS.OK).json({
       message: 'User login successfully',
       user: userDocument,
