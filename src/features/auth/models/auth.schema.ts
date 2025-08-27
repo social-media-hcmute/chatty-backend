@@ -15,7 +15,10 @@ const authSchema: Schema = new Schema(
     avatarColor: { type: String },
     createdAt: { type: Date, default: Date.now },
     passwordResetToken: { type: String, default: '' },
-    passwordResetExpires: { type: Number }
+    passwordResetExpires: { type: Number },
+    emailActiveToken: { type: String, default: '' },
+    emailActiveExpires: { type: Number },
+    isActive: { type: Boolean, default: false }
   },
   {
     toJSON: {

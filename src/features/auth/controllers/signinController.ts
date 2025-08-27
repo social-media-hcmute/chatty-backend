@@ -35,6 +35,10 @@ export class SignIn {
       throw new BadRequestError('Invalid credentials');
     }
 
+    if (!existingUser.isActive) {
+      throw new BadRequestError('Please activate your account');
+    }
+
     const user: IUserDocument = await userService.getUserByAuthId(`${existingUser._id}`);
     log.info(user);
 
@@ -70,8 +74,6 @@ export class SignIn {
       date: moment().format('DD/MM/YYYY HH:mm')
     };
 
-    const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
-    emailQueue.addEmailJob('forgotPasswordEmail',{template, receiverEmail: 'olin.homenick91@ethereal.email',subject: 'Password Reset Confirmation'});
     res.status(HTTP_STATUS.OK).json({
       message: 'User login successfully',
       user: userDocument,
