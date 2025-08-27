@@ -17,8 +17,19 @@ import { authQueue } from '@service/queues/auth.queue';
 import { userQueue } from '@service/queues/user.queue';
 import JWT from 'jsonwebtoken';
 import { config } from '@root/config';
+import crypto from 'crypto';
+import moment from 'moment';
+import publicIP from 'ip';
+import { resetPasswordTemplate } from '@service/emails/templates/reset-password/reset-password-template';
+import { emailQueue } from '@service/queues/email.queue';
+import { forgotPasswordTemplate } from '@service/emails/templates/forgot-password/forgot-password-template';
+import Logger from 'bunyan';
+import e from 'cors';
+import { activeAccountTemplate } from '@service/emails/templates/active-account/active-account-template';
 
 const userCache: UserCache = new UserCache();
+
+const log: Logger = config.createLogger('SignUp');
 
 export class SignUp {
   @JoiValidation(signupSchema)
@@ -32,14 +43,21 @@ export class SignUp {
     const authObjectId: ObjectId = new ObjectId();
     const userObjectId: ObjectId = new ObjectId();
     const uId = `${Helpers.generateRandomInteger(12)}`;
-    const authData: IAuthDocument = SignUp.prototype.signupData({
+    const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
+    const randomCharacters: string = randomBytes.toString('hex');
+    const authData: any = await SignUp.prototype.signupData({
       _id: authObjectId,
       uId,
       username,
       email,
       password,
-      avatarColor
+      avatarColor,
+      emailActiveToken: randomCharacters,
+      emailActiveExpires: Date.now() * 3600000
     });
+
+    log.info(authData.emailActiveToken);
+    log.info(authData.emailActiveExpires);
     const result: UploadApiResponse = (await uploads(avatarImage, `${userObjectId}`, true, true)) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
@@ -55,13 +73,19 @@ export class SignUp {
     authQueue.addAuthUserJob('addAuthUserToDB', { value: userDataForCache });
     userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
-    const userJwt: string = SignUp.prototype.signToken(authData, userObjectId);
-    req.session = { jwt: userJwt };
+
+
+    const resetLink = `${config.CLIENT_URL}/activate?token=${randomCharacters}`;
+    const template: string = activeAccountTemplate.activeAccountTemplate(username, resetLink);
+    emailQueue.addEmailJob('forgotPasswordEmail', { template, receiverEmail: email, subject: 'Activate your account' });
+
+    // const userJwt: string = SignUp.prototype.signToken(authData, userObjectId);
+    // req.session = { jwt: userJwt };
 
     res.status(HTTP_STATUS.CREATED).json({
       message: 'User created successfully',
-      user: userDataForCache,
-      token: userJwt
+      user: userDataForCache
+      //token: userJwt
     });
   }
 
@@ -78,8 +102,9 @@ export class SignUp {
     );
   }
 
-  private signupData(data: ISignUpData): IAuthDocument {
-    const { _id, username, email, password, uId, avatarColor } = data;
+  private async signupData(data: any): Promise<IAuthDocument> {
+    const { _id, username, email, password, uId, avatarColor, emailActiveToken, emailActiveExpires } = data;
+
     return {
       _id,
       uId,
@@ -87,12 +112,14 @@ export class SignUp {
       email,
       password,
       avatarColor,
+      emailActiveToken,
+      emailActiveExpires,
       createdAt: new Date()
     } as IAuthDocument;
   }
 
   private userData(data: IAuthDocument, userObjectId: ObjectId): IUserDocument {
-    const { _id, uId, username, password, email, avatarColor } = data;
+    const { _id, uId, username, password, email, avatarColor, emailActiveToken, emailActiveExpires } = data;
     return {
       _id: userObjectId,
       authId: _id,
@@ -101,6 +128,8 @@ export class SignUp {
       email,
       password,
       avatarColor,
+      emailActiveToken,
+      emailActiveExpires,
       profilePicture: '',
       blocked: [],
       blockedBy: [],
@@ -126,5 +155,32 @@ export class SignUp {
         youtube: ''
       }
     } as unknown as IUserDocument;
+  }
+
+  public async activeAccount(req: Request, res: Response): Promise<void> {
+    const { token } = req.params;
+    const existingUser: IAuthDocument = await authService.getAuthUserByEmailActiveToken(token);
+
+    if (!existingUser) {
+      throw new BadRequestError('Reset token has expired');
+    }
+
+    existingUser.isActive = true;
+    existingUser.emailActiveExpires = undefined;
+    existingUser.emailActiveToken = undefined;
+    await existingUser.save();
+
+    // const templateParams: any = {
+    //   username: existingUser.username!,
+    //   email: existingUser.email!,
+    //   ipaddress: publicIP.address(),
+    //   date: moment().format('DD/MM/YYYY HH:mm')
+    // };
+
+    // const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
+    // emailQueue.addEmailJob('forgotPasswordEmail', { template, receiverEmail: existingUser.email!, subject: 'Verification Email' });
+    res.status(HTTP_STATUS.OK).json({
+      message: 'Account is activated!'
+    });
   }
 }
