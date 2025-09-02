@@ -40,7 +40,6 @@ export class SignIn {
     }
 
     const user: IUserDocument = await userService.getUserByAuthId(`${existingUser._id}`);
-    log.info(user);
 
     const userJwt: string = JWT.sign(
       {
