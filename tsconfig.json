@@ -44,6 +44,9 @@
       "@reaction/*": [
         "src/features/reactions/*"
       ],
+      "@comment/*": [
+        "src/features/comments/*"
+      ],
       "@global/*": [
         "src/shared/globals/*"
       ],
