@@ -47,6 +47,9 @@
       "@comment/*": [
         "src/features/comments/*"
       ],
+      "@follower/*": [
+        "src/features/followers/*"
+      ],
       "@global/*": [
         "src/shared/globals/*"
       ],
