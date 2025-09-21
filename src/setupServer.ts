@@ -16,6 +16,8 @@ import applicationRoutes from '@root/routes';
 import Logger from 'bunyan';
 import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
 import { SocketIOPostHandler } from '@socket/post';
+import { SocketIOFollowerHandler } from '@socket/follower';
+import { SocketIOUserHandler } from '@socket/user';
 
 const log: Logger = config.createLogger('server');
 
@@ -117,6 +119,11 @@ export class SocialMediaServer {
 
   private socketIOConnections(io: Server): void {
     const postSocketHandler: SocketIOPostHandler = new SocketIOPostHandler(io);
+     const followerSocketHandler: SocketIOFollowerHandler = new SocketIOFollowerHandler(io);
+    const userSocketHandler: SocketIOUserHandler = new SocketIOUserHandler(io);
+
     postSocketHandler.listen();
+    followerSocketHandler.listen();
+    userSocketHandler.listen();
   }
 }
