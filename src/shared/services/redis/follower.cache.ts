@@ -19,7 +19,7 @@ export class FollowerCache extends BaseCache {
 
   public async saveFollowerToCache(key: string, value: string): Promise<void> {
     try {
-      if(!this.client.isOpen) {
+      if (!this.client.isOpen) {
         await this.client.connect();
       }
       await this.client.LPUSH(key, value);
@@ -31,7 +31,7 @@ export class FollowerCache extends BaseCache {
 
   public async removeFollowerFromCache(key: string, value: string): Promise<void> {
     try {
-      if(!this.client.isOpen) {
+      if (!this.client.isOpen) {
         await this.client.connect();
       }
       await this.client.LREM(key, 1, value);
@@ -43,7 +43,7 @@ export class FollowerCache extends BaseCache {
 
   public async updateFollowersCountInCache(userId: string, prop: string, value: number): Promise<void> {
     try {
-      if(!this.client.isOpen) {
+      if (!this.client.isOpen) {
         await this.client.connect();
       }
       await this.client.HINCRBY(`users:${userId}`, prop, value);
@@ -55,13 +55,13 @@ export class FollowerCache extends BaseCache {
 
   public async getFollowersFromCache(key: string): Promise<IFollowerData[]> {
     try {
-      if(!this.client.isOpen) {
+      if (!this.client.isOpen) {
         await this.client.connect();
       }
       const response: string[] = await this.client.LRANGE(key, 0, -1);
       const list: IFollowerData[] = [];
-      for(const item of response) {
-        const user: IUserDocument = await userCache.getUserFromCache(item) as IUserDocument;
+      for (const item of response) {
+        const user: IUserDocument = (await userCache.getUserFromCache(item)) as IUserDocument;
         const data: IFollowerData = {
           _id: new mongoose.Types.ObjectId(user._id),
           username: user.username!,
@@ -84,21 +84,26 @@ export class FollowerCache extends BaseCache {
 
   public async updateBlockedUserPropInCache(key: string, prop: string, value: string, type: 'block' | 'unblock'): Promise<void> {
     try {
-      if(!this.client.isOpen) {
+      if (!this.client.isOpen) {
         await this.client.connect();
       }
 
-      const response: string = await this.client.HGET(`users:${key}`, prop) as string;
+      const response: any = await this.client.HGET(`users:${key}`, prop);
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
-      let blocked: string[] = Helpers.parseJson(response) as string[];
+      let blocked: string[] = [];
+      if (response) {
+        blocked = Helpers.parseJson(response) as string[];
+        if (!Array.isArray(blocked)) {
+          blocked = [];
+        }
+      }
       if (type === 'block') {
         blocked = [...blocked, value];
       } else {
         remove(blocked, (id: string) => id === value);
         blocked = [...blocked];
       }
-      const dataToSave: string[] = [`${prop}`, JSON.stringify(blocked)];
-      multi.HSET(`users:${key}`, dataToSave);
+      multi.HSET(`users:${key}`, `${prop}`, JSON.stringify(blocked));
       await multi.exec();
     } catch (error) {
       log.error(error);
