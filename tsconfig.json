@@ -35,7 +35,10 @@
       "@user/*": [
         "src/features/user/*"
       ],
-       "@post/*": [
+      "@notification/*": [
+        "src/features/notifications/*"
+      ],
+      "@post/*": [
         "src/features/post/*"
       ],
       "@auth/*": [
