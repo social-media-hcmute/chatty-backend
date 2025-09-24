@@ -18,6 +18,7 @@ class UserService {
     ]);
     return users[0];
   }
+
   public async getUserByAuthId(authId: string): Promise<IUserDocument> {
     const users: IUserDocument[] = await UserModel.aggregate([
       { $match: { authId: new mongoose.Types.ObjectId(authId) } },
@@ -27,6 +28,8 @@ class UserService {
     ]);
     return users[0];
   }
+
+
 
   private aggregateProject() {
     return {

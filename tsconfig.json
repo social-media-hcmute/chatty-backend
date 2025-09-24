@@ -35,7 +35,10 @@
       "@user/*": [
         "src/features/user/*"
       ],
-       "@post/*": [
+      "@notification/*": [
+        "src/features/notifications/*"
+      ],
+      "@post/*": [
         "src/features/post/*"
       ],
       "@auth/*": [
@@ -46,6 +49,9 @@
       ],
       "@comment/*": [
         "src/features/comments/*"
+      ],
+      "@follower/*": [
+        "src/features/followers/*"
       ],
       "@global/*": [
         "src/shared/globals/*"
