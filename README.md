@@ -2,100 +2,92 @@ Chatty — Mạng xã hội
 
 Ngôn ngữ: Tiếng Việt
 
-Mô tả dự án
+🧩 Mô tả dự án
 
-Chatty là một dự án hệ thống mạng xã hội (social network) mẫu được xây dựng để học tập và triển khai thực tế. Ứng dụng gồm backend (Node.js + Express + Mongoose) và frontend (React.js + Bootstrap CSS). Người dùng có thể đăng ký/đăng nhập, tạo bài viết, like/comment, theo dõi người khác, chỉnh sửa hồ sơ, và tải ảnh lên.
+Chatty là một dự án mạng xã hội được xây dựng bằng Node.js, Express.js, React.js, Mongoose và Bootstrap CSS.
+Người dùng có thể đăng ký, đăng nhập, đăng bài viết, bình luận, thích, theo dõi người khác và chỉnh sửa hồ sơ cá nhân.
 
-Mục tiêu của dự án:
+🎯 Mục tiêu
 
-Cung cấp nền tảng để học cách xây dựng ứng dụng full-stack hiện đại.
+Học và thực hành xây dựng ứng dụng Full-Stack hiện đại.
 
-Triển khai RESTful API với xác thực JWT.
+Xây dựng RESTful API sử dụng JWT Authentication.
 
 Làm việc với MongoDB thông qua Mongoose.
 
-Xây dựng giao diện tương tác bằng React và Bootstrap.
+Tạo giao diện người dùng hiện đại bằng React + Bootstrap.
 
-Tính năng chính
+🚀 Tính năng chính
 
 Đăng ký / Đăng nhập (JWT)
 
-Xác thực và phân quyền (user vs admin)
+Xác thực và phân quyền (User / Admin)
 
-Hồ sơ người dùng (avatar, bio, thông tin cơ bản)
+Hồ sơ người dùng (Avatar, Bio, Thông tin cơ bản)
 
-Tạo / sửa / xóa bài viết (text + ảnh)
+Tạo / Sửa / Xóa bài viết (Text + Ảnh)
 
-Đọc bài viết (feed), bấm like, comment
+Like / Comment bài viết
 
-Theo dõi / bỏ theo dõi người dùng
+Theo dõi / Bỏ theo dõi người dùng
 
-Tìm kiếm người dùng và bài viết
+Tìm kiếm người dùng hoặc bài viết
 
-Upload ảnh (local hoặc service như Cloudinary)
+Upload ảnh (local hoặc Cloudinary)
 
-API chuẩn RESTful, có pagination, lọc, sắp xếp
+API chuẩn RESTful có Pagination, Lọc, Sắp xếp
 
-Kiến trúc & Công nghệ
+⚙️ Công nghệ sử dụng
+Thành phần	Công nghệ
+Backend	Node.js, Express.js
+Frontend	React.js
+Database	MongoDB + Mongoose
+UI	Bootstrap CSS
+Auth	JSON Web Token (JWT)
+Upload	Multer / Cloudinary
+Lint / Format	ESLint + Prettier
+🧱 Cấu trúc thư mục
+chatty/
+│
+├── server/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── middlewares/
+│   │   ├── utils/
+│   │   └── index.js
+│   ├── package.json
+│   └── .env
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── contexts/
+│   │   └── index.js
+│   ├── package.json
+│   └── .env
+│
+└── README.md
 
-Backend: Node.js, Express.js
-
-Database: MongoDB, Mongoose
-
-Frontend: React.js (functional components + hooks)
-
-UI: Bootstrap CSS (có thể dùng react-bootstrap hoặc bootstrap thuần)
-
-Authentication: JSON Web Token (JWT)
-
-Upload file: Multer (hoặc Cloudinary SDK nếu dùng dịch vụ cloud)
-
-Linting / Formatting: ESLint, Prettier (khuyến nghị)
-
-Yêu cầu trước khi cài đặt
-
-Node.js >= 14
-
-npm hoặc yarn
-
-MongoDB (cục bộ hoặc chuỗi kết nối Atlas)
-
-(Tùy chọn) Tài khoản Cloudinary nếu muốn upload ảnh lên cloud
-
-Cài đặt & chạy dự án (local)
-
-Giả sử repo được chia thành hai thư mục chính: /server (backend) và /client (frontend).
-
-1) Backend (server)
-# vào thư mục server
+⚡ Cài đặt & chạy dự án
+1️⃣ Backend
 cd server
-
-
-# cài dependencies
 npm install
-
-
-# tạo file .env (tham khảo dưới)
-# chạy server ở mode dev
 npm run dev
-2) Frontend (client)
-# vào thư mục client
+
+2️⃣ Frontend
 cd client
-
-
-# cài dependencies
 npm install
-
-
-# chạy frontend
 npm start
 
-Gợi ý: có thể dùng concurrently hoặc npm-run-all để start cả hai cùng lúc từ root project nếu muốn.
 
-Biến môi trường (.env)
+Gợi ý: có thể dùng concurrently để chạy cả server & client cùng lúc.
 
-Ví dụ các biến môi trường cần cấu hình cho backend (server/.env):
-
+🔐 Cấu hình biến môi trường
+Backend (server/.env)
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/chatty
 JWT_SECRET=your_jwt_secret_here
@@ -105,134 +97,73 @@ CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
 NODE_ENV=development
 
-Với frontend (client/.env hoặc config):
-
+Frontend (client/.env)
 REACT_APP_API_URL=http://localhost:5000/api
-Cấu trúc thư mục gợi ý
-/chatty-root
-│
-├─ server
-│  ├─ src
-│  │  ├─ controllers
-│  │  ├─ models
-│  │  ├─ routes
-│  │  ├─ middlewares
-│  │  ├─ utils
-│  │  ├─ services
-│  │  └─ index.js (app entry)
-│  ├─ package.json
-│  └─ .env
-│
-├─ client
-│  ├─ src
-│  │  ├─ components
-│  │  ├─ pages
-│  │  ├─ hooks
-│  │  ├─ services (API calls)
-│  │  ├─ contexts (AuthContext)
-│  │  └─ index.js
-│  ├─ package.json
-│  └─ .env
-│
-└─ README.md
-API cơ bản (ví dụ)
 
-Prefix: /api
+🌐 API Endpoints (ví dụ)
+Method	Endpoint	Mô tả
+POST	/api/auth/register	Đăng ký người dùng
+POST	/api/auth/login	Đăng nhập
+GET	/api/users/:id	Lấy thông tin user
+PUT	/api/users/:id	Cập nhật profile
+POST	/api/posts	Tạo bài viết
+GET	/api/posts	Lấy danh sách bài viết
+POST	/api/posts/:id/like	Like / Unlike bài viết
+POST	/api/posts/:id/comments	Thêm bình luận
+🖼️ Upload file
 
-POST /api/auth/register — đăng ký
+Local (Dev): Dùng multer, lưu ảnh trong thư mục uploads/.
 
-POST /api/auth/login — đăng nhập (trả JWT)
+Cloud (Prod): Dùng Cloudinary để lưu ảnh trên cloud.
 
-GET /api/users/:id — lấy thông tin user
+🧠 Bảo mật
 
-PUT /api/users/:id — cập nhật profile (auth)
+Không commit file .env
 
-POST /api/posts — tạo bài viết (auth)
+Middleware kiểm tra token cho các route yêu cầu đăng nhập
 
-GET /api/posts — lấy feed / posts (pagination, sort)
+Kiểm tra quyền sở hữu trước khi sửa / xóa bài viết
 
-GET /api/posts/:id — lấy chi tiết bài viết
+Dùng helmet, rate-limit để giảm tấn công
 
-PUT /api/posts/:id — sửa bài viết (auth, owner)
+🚢 Triển khai
 
-DELETE /api/posts/:id — xóa bài viết (auth, owner)
+Backend: Heroku / Render / Railway / Docker
 
-POST /api/posts/:id/like — like/unlike
+Frontend: Netlify / Vercel / GitHub Pages
 
-POST /api/posts/:id/comments — thêm comment
+Database: MongoDB Atlas
 
-GET /api/search — tìm kiếm
+🧪 Testing (gợi ý)
 
-Bạn nên dùng Postman / Insomnia để tạo collection API và chia sẻ.
+Backend: Jest + Supertest
 
-Lưu trữ file (ảnh)
+Frontend: React Testing Library
 
-Có hai lựa chọn hay dùng:
+💡 Gợi ý phát triển thêm
 
-Lưu file tại server (nên chỉ cho môi trường dev) — sử dụng multer để lưu vào thư mục uploads/ và phục vụ tĩnh.
+Chat real-time (socket.io)
 
-Lưu ảnh trên dịch vụ cloud (Cloudinary, S3) — upload từ server (hoặc trực tiếp từ client thông qua signed URL).
+Thông báo real-time
 
-Bảo mật
+Hệ thống reaction (❤️ 😂 😢 ...)
 
-Lưu trữ JWT_SECRET an toàn (không commit vào git)
+Feed cập nhật theo thời gian thực
 
-Xác thực các route quan trọng (middleware kiểm tra token)
+Caching (Redis)
 
-Kiểm tra quyền sở hữu khi sửa/xóa bài viết
+Microservice Architecture
 
-Giới hạn kích thước file upload và lọc loại file
-
-Sử dụng helmet, express-rate-limit để giảm rủi ro
-
-Deployment (gợi ý)
-
-Backend: deploy lên Heroku / Render / DigitalOcean / Railway / Vercel (serverless), hoặc containerize bằng Docker.
-
-Frontend: deploy lên Netlify / Vercel / Surge / GitHub Pages (nếu build tĩnh)
-
-Cấu hình biến môi trường ở môi trường production.
-
-Ví dụ Docker (tóm tắt):
-
-Viết Dockerfile cho server
-
-Viết Dockerfile cho client (build stage) hoặc chỉ dùng CDN để serve build tĩnh
-
-Dùng Docker Compose nếu muốn chạy cùng 1 stack với MongoDB cục bộ
-
-Testing
-
-Backend: viết unit tests cho controllers, integration tests cho routes (Jest + Supertest)
-
-Frontend: test components bằng React Testing Library
-
-Lint / Format
-
-Cấu hình ESLint + Prettier cho cả server và client để giữ style consistent.
-
-Gợi ý phát triển thêm (tính năng mở rộng)
-
-Hệ thống thông báo real-time (socket.io)
-
-Chat real-time 1-1 và nhóm
-
-Realtime feed (push khi có bài mới từ người mình follow)
-
-Hệ thống reaction (nhiều kiểu cảm xúc)
-
-Multi-image posts, albums
-
-Redis caching cho feed và rate-limiting
-
-Microservices (tách service upload, notification,...)
-
-Đóng góp
+👥 Đóng góp
 
 Fork repo
 
-Tạo branch feature: feature/ten-tinh-nang
+Tạo branch mới: feature/ten-tinh-nang
 
-Commit, push và mở Pull Request
+Commit & push
 
-Đảm bảo test pass và giữ coding style
+Gửi Pull Request
+
+📜 License
+
+Dự án được phát hành theo MIT License.
