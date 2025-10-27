@@ -55,7 +55,7 @@ chatty/
 │   ├── package.json           # Quản lý thư viện frontend
 │   └── .env                   # Biến môi trường frontend
 └── README.md                   # Tài liệu dự án
-⚡ Cài đặt & chạy dự án
+##⚡ Cài đặt & chạy dự án
 1️⃣ Backend
 bashcd server
 npm install
@@ -67,7 +67,7 @@ npm start
 Gợi ý: Chạy đồng thời backend và frontend với concurrently:
 bashnpm install -g concurrently
 concurrently "cd server && npm run dev" "cd client && npm start"
-🔐 Cấu hình biến môi trường
+##🔐 Cấu hình biến môi trường
 Backend (server/.env)
 plaintextPORT=5000
 MONGO_URI=mongodb://localhost:27017/chatty
@@ -79,32 +79,32 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 NODE_ENV=development
 Frontend (client/.env)
 plaintextREACT_APP_API_URL=http://localhost:5000/api
-🌐 API Endpoints
+##🌐 API Endpoints
 MethodEndpointMô tảPOST/api/auth/registerĐăng ký người dùngPOST/api/auth/loginĐăng nhậpGET/api/users/:idLấy thông tin người dùngPUT/api/users/:idCập nhật hồ sơPOST/api/postsTạo bài viếtGET/api/postsLấy danh sách bài viếtPOST/api/posts/:id/likeThích/Bỏ thích bài viếtPOST/api/posts/:id/commentsThêm bình luận
-🖼️ Upload file
+##🖼️ Upload file
 
 Dev: Sử dụng Multer để lưu ảnh vào thư mục uploads/.
 Prod: Sử dụng Cloudinary để lưu trữ ảnh trên cloud.
 
-🧠 Bảo mật
+##🧠 Bảo mật
 
 Không commit file .env lên repository.
 Sử dụng middleware để kiểm tra token JWT cho các route bảo mật.
 Kiểm tra quyền sở hữu trước khi sửa hoặc xóa bài viết.
 Sử dụng helmet và rate-limit để tăng cường bảo mật.
 
-🚢 Triển khai
+##🚢 Triển khai
 
 Backend: Heroku, Render, Railway, hoặc Docker.
 Frontend: Netlify, Vercel, hoặc GitHub Pages.
 Database: MongoDB Atlas.
 
-🧪 Testing
+##🧪 Testing
 
 Backend: Kiểm tra API với Jest và Supertest.
 Frontend: Kiểm tra giao diện với React Testing Library.
 
-💡 Ý tưởng phát triển thêm
+##💡 Ý tưởng phát triển thêm
 
 Chat thời gian thực: Tích hợp Socket.io để hỗ trợ trò chuyện.
 Thông báo: Gửi thông báo khi có tương tác mới.
@@ -113,12 +113,12 @@ Feed thời gian thực: Cập nhật bài viết ngay lập tức.
 Caching: Sử dụng Redis để tối ưu hiệu suất.
 Microservices: Tách dịch vụ để dễ mở rộng.
 
-👥 Đóng góp
+##👥 Đóng góp
 
 Fork repository.
 Tạo branch mới: git checkout -b feature/ten-tinh-nang.
 Commit và push: git commit -m "Mô tả thay đổi" && git push.
 Gửi Pull Request để được xem xét.
 
-📜 Giấy phép
+##📜 Giấy phép
 Dự án được phát hành theo MIT License.
