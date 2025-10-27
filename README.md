@@ -1,5 +1,5 @@
-Chatty — Mạng xã hội
-
+**Chatty — Mạng xã hội
+**
 Ngôn ngữ: Tiếng Việt
 
 🧩 Mô tả dự án
