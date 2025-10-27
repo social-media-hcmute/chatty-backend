@@ -55,21 +55,45 @@ chatty/
 │   ├── package.json           # Quản lý thư viện frontend
 │   └── .env                   # Biến môi trường frontend
 └── README.md                   # Tài liệu dự án
-##⚡ Cài đặt & chạy dự án
-1️⃣ Backend
-bashcd server
+
+Tuyệt vời\! Đây là phần còn lại của tài liệu README.md được định dạng theo yêu cầu, đảm bảo tính nhất quán với các phần trước.
+
+-----
+
+## ⚡ Cài đặt & Chạy Dự án
+
+### 1️⃣ Khởi động Backend
+
+```bash
+cd server
 npm install
 npm run dev
-2️⃣ Frontend
-bashcd client
+```
+
+### 2️⃣ Khởi động Frontend
+
+```bash
+cd client
 npm install
 npm start
-Gợi ý: Chạy đồng thời backend và frontend với concurrently:
-bashnpm install -g concurrently
+```
+
+### 💡 Gợi ý: Chạy đồng thời
+
+Sử dụng **concurrently** để chạy cả hai dịch vụ cùng lúc (cần cài đặt: `npm install -g concurrently`):
+
+```bash
 concurrently "cd server && npm run dev" "cd client && npm start"
-##🔐 Cấu hình biến môi trường
-Backend (server/.env)
-plaintextPORT=5000
+```
+
+-----
+
+## 🔐 Cấu hình Biến Môi trường
+
+### Backend (`server/.env`)
+
+```plaintext
+PORT=5000
 MONGO_URI=mongodb://localhost:27017/chatty
 JWT_SECRET=your_jwt_secret_here
 JWT_EXPIRES_IN=7d
@@ -77,48 +101,87 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 NODE_ENV=development
-Frontend (client/.env)
-plaintextREACT_APP_API_URL=http://localhost:5000/api
-##🌐 API Endpoints
-MethodEndpointMô tảPOST/api/auth/registerĐăng ký người dùngPOST/api/auth/loginĐăng nhậpGET/api/users/:idLấy thông tin người dùngPUT/api/users/:idCập nhật hồ sơPOST/api/postsTạo bài viếtGET/api/postsLấy danh sách bài viếtPOST/api/posts/:id/likeThích/Bỏ thích bài viếtPOST/api/posts/:id/commentsThêm bình luận
-##🖼️ Upload file
+```
 
-Dev: Sử dụng Multer để lưu ảnh vào thư mục uploads/.
-Prod: Sử dụng Cloudinary để lưu trữ ảnh trên cloud.
+### Frontend (`client/.env`)
 
-##🧠 Bảo mật
+```plaintext
+REACT_APP_API_URL=http://localhost:5000/api
+```
 
-Không commit file .env lên repository.
-Sử dụng middleware để kiểm tra token JWT cho các route bảo mật.
-Kiểm tra quyền sở hữu trước khi sửa hoặc xóa bài viết.
-Sử dụng helmet và rate-limit để tăng cường bảo mật.
+-----
 
-##🚢 Triển khai
+## 🌐 API Endpoints
 
-Backend: Heroku, Render, Railway, hoặc Docker.
-Frontend: Netlify, Vercel, hoặc GitHub Pages.
-Database: MongoDB Atlas.
+| Method | Endpoint | Mô tả |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Đăng ký người dùng mới |
+| `POST` | `/api/auth/login` | Đăng nhập người dùng |
+| `GET` | `/api/users/:id` | Lấy thông tin người dùng |
+| `PUT` | `/api/users/:id` | Cập nhật hồ sơ cá nhân |
+| `POST` | `/api/posts` | Tạo bài viết mới |
+| `GET` | `/api/posts` | Lấy danh sách bài viết |
+| `POST` | `/api/posts/:id/like` | Thích/Bỏ thích bài viết |
+| `POST` | `/api/posts/:id/comments` | Thêm bình luận vào bài viết |
 
-##🧪 Testing
+-----
 
-Backend: Kiểm tra API với Jest và Supertest.
-Frontend: Kiểm tra giao diện với React Testing Library.
+## 🖼️ Upload File
 
-##💡 Ý tưởng phát triển thêm
+  - **Môi trường Dev**: Sử dụng **Multer** để lưu ảnh vào thư mục `uploads/`.
+  - **Môi trường Prod**: Sử dụng dịch vụ **Cloudinary** để lưu trữ ảnh trên cloud.
 
-Chat thời gian thực: Tích hợp Socket.io để hỗ trợ trò chuyện.
-Thông báo: Gửi thông báo khi có tương tác mới.
-Reaction: Thêm biểu tượng cảm xúc (❤️, 😂, 😢, ...).
-Feed thời gian thực: Cập nhật bài viết ngay lập tức.
-Caching: Sử dụng Redis để tối ưu hiệu suất.
-Microservices: Tách dịch vụ để dễ mở rộng.
+-----
 
-##👥 Đóng góp
+## 🧠 Bảo mật
 
-Fork repository.
-Tạo branch mới: git checkout -b feature/ten-tinh-nang.
-Commit và push: git commit -m "Mô tả thay đổi" && git push.
-Gửi Pull Request để được xem xét.
+  - **Tuyệt đối** không commit file `.env` lên repository.
+  - Sử dụng middleware để kiểm tra **token JWT** cho các route cần xác thực.
+  - Kiểm tra quyền sở hữu trước khi cho phép sửa hoặc xóa bài viết.
+  - Sử dụng các thư viện bảo mật như **helmet** và **rate-limit**.
 
-##📜 Giấy phép
-Dự án được phát hành theo MIT License.
+-----
+
+## 🚢 Triển khai (Deployment)
+
+  - **Backend**: Heroku, Render, Railway, hoặc Docker.
+  - **Frontend**: Netlify, Vercel, hoặc GitHub Pages.
+  - **Database**: MongoDB Atlas.
+
+-----
+
+## 🧪 Testing
+
+  - **Backend**: Kiểm tra API bằng **Jest** và **Supertest**.
+  - **Frontend**: Kiểm tra giao diện người dùng bằng **React Testing Library**.
+
+-----
+
+## 💡 Ý tưởng Phát triển Thêm
+
+  - **Chat Thời gian Thực**: Tích hợp **Socket.io** để hỗ trợ trò chuyện trực tuyến.
+  - **Thông báo**: Gửi thông báo khi có tương tác mới (thích, bình luận, theo dõi).
+  - **Reaction**: Thêm biểu tượng cảm xúc nâng cao (❤️, 😂, 😢, ...).
+  - **Feed Thời gian Thực**: Cập nhật bài viết ngay lập tức mà không cần làm mới trang.
+  - **Caching**: Sử dụng **Redis** để tối ưu hiệu suất truy vấn.
+  - **Microservices**: Tách dịch vụ để dễ dàng mở rộng và quản lý.
+
+-----
+
+## 👥 Đóng góp
+
+Chúng tôi hoan nghênh mọi đóng góp\!
+
+1.  **Fork** repository.
+2.  Tạo branch mới: `git checkout -b feature/ten-tinh-nang`.
+3.  Commit và push: `git commit -m "Mô tả thay đổi" && git push`.
+4.  Gửi **Pull Request** để được xem xét.
+
+-----
+
+## 📜 Giấy phép
+
+Dự án được phát hành theo **MIT License**.
+
+```
+```
